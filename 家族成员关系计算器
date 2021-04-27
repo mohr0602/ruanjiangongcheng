@@ -1,0 +1,268 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+struct Tree
+{
+	char name[10];
+	int num;
+	int sex;
+	int generation;
+	struct Tree *houdai[5];
+}*bTree;
+struct Tree *Create(struct Tree **t)
+{
+	if((*t)==NULL)
+		return NULL;
+	(*t)->houdai[((*t)->num)]=(struct Tree *) malloc(sizeof(struct Tree));
+	printf("请输入成员的信息,输入格式为：姓名 性别代数（男输入1，女输入2,）\n你输入的成员信息为：");
+	scanf_s("%s %d",(*t)->houdai[((*t)->num)]->name,10,&(*t)->houdai[((*t)->num)]->sex);
+	(*t)->houdai[((*t)->num)]->num=0;
+	(*t)->houdai[((*t)->num)]->generation=(*t)->generation+1;
+	int i=0;
+	while(i<5)
+	{
+			(*t)->houdai[((*t)->num)]->houdai[i]=NULL;
+		i++;
+	}
+	(*t)->num++;
+	printf("输入成员成功！\n");
+	return (*t);
+}
+struct Tree *Chaxun(struct Tree *t,char name[10])
+{
+	int i=0;
+	struct Tree *ret;
+	while((t!=NULL)&&(i<=t->num))
+	{
+		if(strcmp(t->name,name)==0)
+			return t;
+		else
+		{
+			ret=Chaxun(t->houdai[i],name);
+			if((ret!=NULL)&&(strcmp(ret->name,name)==0))
+				return ret;
+			i++;
+		}
+	}
+	return NULL;
+}
+void Young(int x,int k,int sex)
+{
+	if((x==1)&&(k==0))
+	{
+		if(sex==1)
+			printf("的儿子");
+		else
+			printf("的女儿");
+	}
+	if((x==1)&&(k==1))
+	{
+		if(sex==1)
+			printf("的儿子，称侄儿");
+		else
+			printf("的女儿，称侄女");
+	}
+	if((x==2)&&(k==0))
+	{
+		if(sex==1)
+			printf("的孙子");
+		else
+			printf("的孙女");
+	}
+	if((x==2)&&(k==1))
+	{
+		if(sex==1)
+			printf("的孙子，还称侄孙");
+		else
+			printf("的孙女，还称侄孙女");
+	}
+	if(x==3)
+	{
+		if(sex==1)
+			printf("的曾孙");
+		else
+			printf("的曾孙女");
+	}
+	if(x==4)
+	{
+		if(sex==1)
+			printf("的玄孙");
+		else
+			printf("的玄孙女");
+	}
+	if(x==5)
+	{
+		if(sex==1)
+			printf("的来孙");
+		else
+			printf("的来孙女");
+	}
+	if(x==6)
+	{
+		if(sex==1)
+			printf("的晜孙");
+		else
+			printf("的晜孙女");
+	}
+	if(x==7)
+	{
+		if(sex==1)
+			printf("的仍孙");
+		else
+			printf("的仍孙女");
+	}
+	if(x==8)
+	{
+		if(sex==1)
+			printf("的云孙");
+		else
+			printf("的云孙女");
+	}
+	if(x==9)
+	{
+		if(sex==1)
+			printf("的耳孙");
+		else
+			printf("的耳孙女");
+	}
+}
+void Old(int x,int k)
+{
+	if((x==1)&&(k==0))
+	{
+		printf("的父亲");
+	}
+	if((x==1)&&(k==1))
+	{
+		printf("的伯父");
+	}
+	if((x==2)&&(k==0))
+	{
+		printf("的祖父");
+	}
+	if((x==2)&&(k==1))
+	{
+		printf("的大爷爷或小爷爷");
+	}
+	if(x==3)
+	{
+		printf("的曾祖");
+	}
+	if(x==4)
+	{
+		printf("的高祖");
+	}
+	if(x==5)
+	{
+		printf("的天祖");
+	}
+	if(x==6)
+	{
+		printf("的烈祖");
+	}
+	if(x==7)
+	{
+		printf("的太祖");
+	}
+	if(x==8)
+	{
+		printf("的远祖");
+	}
+	if(x==9)
+	{
+		printf("的鼻祖");
+	}
+	if((x>2)&&(k==1))
+	{
+		printf("的表兄弟");
+	}
+	printf("\n");
+}
+void Guanxi(struct Tree *t1,struct Tree *t2)
+{
+	struct Tree *told,*tyog,*t;
+	int x,k=0;
+	if(t1->generation>t2->generation)
+	{
+		tyog=t1;
+		told=t2;
+	}
+	else
+	{
+		tyog=t2;
+		told=t1;
+	}
+	x=tyog->generation-told->generation;
+	t=Chaxun(told,tyog->name);
+	if(t==NULL)
+	{
+		k=1;
+		printf("%s是%s表兄弟",tyog->name,told->name);
+	}
+	else
+		printf("%s是%s",tyog->name,told->name);
+	Young(x,k,tyog->sex);
+	printf("；%s是%s",told->name,tyog->name);
+	Old(x,k);
+}
+int main()
+{
+	int a=0;
+	struct Tree *p0;
+	p0=(struct Tree *) malloc(sizeof(struct Tree));
+	p0->num=0;
+	p0->houdai[5]=NULL;
+	printf("请先输入第一祖辈的信息输入格式：姓名 性别代数（男输入1，女输入2,）\n成员信息：");
+	scanf_s("%s %d",p0->name,10,&p0->sex);
+	p0->generation=1;
+	printf("输入成功！\n");
+	int pi=0;
+	char name[10];
+	while(pi<5)
+	{
+		p0->houdai[pi]=NULL;
+		pi++;
+	}
+	struct Tree *ta0,*t1,*t2;
+	ta0=(struct Tree *) malloc(sizeof(struct Tree));
+	t1=(struct Tree *) malloc(sizeof(struct Tree));
+	t2=(struct Tree *) malloc(sizeof(struct Tree));
+	while(1)
+	{
+		printf("\n选择要使用的功能 输入对应的数字\n输入后辈成员 1 ,查找两人关系 2,退出系统 0；你的选择是 :");
+		scanf("%d",&a);
+		if(a==1)
+		{
+			printf("要输入谁的儿子/女儿,请输入Ta的姓名：");
+			scanf_s("%s",name,10);
+			ta0=Chaxun(p0,name);
+			if(ta0==NULL)
+				printf("！！查无此人！！\n");
+			else
+				ta0=Create(&(ta0));
+		}
+		if(a==2)
+		{
+			printf("输入需要查找关系的两位成员的姓名，格式：XXX XXX（用一个空格隔开）");
+			char name1[10],name2[10];
+		    scanf_s("%s %s",name1,10,name2,10);
+			t1=Chaxun(p0,name1);
+			t2=Chaxun(p0,name2);
+			if((t1!=NULL)&&(t2!=NULL))
+				Guanxi(t1,t2);
+			else
+			{
+				if(t1==NULL)
+					printf("成员姓名：%s  查无此人！\n",name1);
+				if(t2==NULL)
+					printf("成员姓名：%s  查无此人！\n",name2);
+			}
+		}
+		if(a==0)
+		{
+			break;
+		}
+	}
+	return 0;
+}
+
